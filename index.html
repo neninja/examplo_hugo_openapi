@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta name=generator content="Hugo 0.81.0"><meta charset=utf-8><title>OpenAPI Static Reference</title></head><body><main><article><header><h1>Static OpenAPI Documentation</h1></header><style>#openapi table{border-collapse:collapse;margin:1rem;width:100%}#openapi table,th,td{border:1px solid #000}</style><div class=$openapi-spec-content id=openapi><h2>Teste Deliver IT version 1.0.0</h2><div class=description><p>Teste do processo seletivo para a Deliver IT</p></div><div style=display:flex;flex-direction:column;margin:3rem><div style="display:flex;padding:.5rem;border:1px solid #000"><div style=width:50%><h4><span style=text-transform:uppercase>get</span>&nbsp;&nbsp;<span style=color:#2f4f4f>/corredores</span></h4><h5></h5><p><a href></a></p><p>Description: Retorna todos corredores</p><h5>Parameters</h5><ul><li><pre>nome</pre></li><li><pre>cpf</pre></li></ul></div><div style=width:50%;display:flex;flex-direction:column></br><div style=max-height:calc(100%);overflow:auto><span style=font-weight:700>Example for Response Code: 200</span><pre style=background:#90ee90><code>{
+  "data": [
+    {
+      "cpf": "37128197060",
+      "dataNascimento": "19940507",
+      "id": 1,
+      "nome": "Lucas"
+    },
+    {
+      "cpf": "41542244099",
+      "dataNascimento": "19940507",
+      "id": 2,
+      "nome": "Gabriel"
+    }
+  ]
+}</code></pre></div></div></div><div style="display:flex;padding:.5rem;border:1px solid #000"><div style=width:50%><h4><span style=text-transform:uppercase>post</span>&nbsp;&nbsp;<span style=color:#2f4f4f>/corredores</span></h4><h5></h5><p><a href></a></p><p>Description: Cria um novo corredor</p><h5>Example Request Body</h5><pre style=background:#add8e6><code>{
+  "cpf": "37128197060",
+  "dataNascimento": "20200507",
+  "nome": "Felipe"
+}</code></pre></div><div style=width:50%;display:flex;flex-direction:column></br><div style=max-height:calc(100%);overflow:auto><span style=font-weight:700>Example for Response Code: 200</span><pre style=background:#90ee90><code>{
+  "data": {
+    "cpf": "37128197060",
+    "dataNascimento": "19940507",
+    "nome": "Lucas"
+  }
+}</code></pre></div></div></div></div></div><p>made with ❤ and <a href=https://github.com/cconcannon/hugo-openapi-documentation>hugo-openapi-documentation</a></p></article></main></body></html>
