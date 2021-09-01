@@ -1,0 +1,121 @@
+<!-- 
+hugo OpenAPI reference documentation generator
+https://github.com/cconcannon/hugo-openapi-documentation
+https://blog.concannon.tech/tech-talk/hugo-openapi-documentation/
+
+Params:
+  url: the public URL of the OpenAPI .json specification
+
+Generates reference documentation based on the provided OpenAPI specification. Use with: {{/*
+
+  {{< generate-openapi-ref-docs url="your-.json-file-url" >}}
+
+  */}}
+
+  Example: {{/*
+
+  {{< generate-openapi-ref-docs url="https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json" >}}
+
+  */}}
+
+If your OpenAPI spec is not hosted at an accessible url endpoint, you can
+store a copy of your OpenAPI specification in the root-level site /data folder.
+Then delete the first and last lines of the code block below, and replace the
+$openapi variable declaration at the beginning with: {{/*
+
+{{ $openapi := .Site.Data.fileName }}
+
+*/}}
+
+where fileName is the file's name with `.json` removed from the end
+ -->
+<!--
+    {{/*
+    {{ with $.Params.url }}
+    {{ $openapi := getJSON $.Params.url }}
+    */}}
+-->
+{{ $openapi := .Site.Data.api }}
+  <style>
+    #openapi table {
+      border-collapse: collapse;
+      margin: 1rem;
+      width: 100%;
+    }
+    #openapi table, th, td {
+      border: 1px solid black;
+    }
+  </style>
+  <div class="$openapi-spec-content" id="openapi">
+    <h2>{{ $openapi.info.title }} version {{ $openapi.info.version }}</h2>
+    <div class="description">
+      <p>{{ $openapi.info.description }}</p>
+    </div>
+    <div style="display: flex; flex-direction: column; margin: 3rem;">
+      {{ range $path, $pathMethods := $openapi.paths }}
+        {{ range $pathMethod, $pathDetails := $pathMethods }}
+          <div style="display: flex; padding: 0.5rem; border: 1px solid black;"> 
+              <div style="width: 50%">
+                <h4><span style="text-transform: uppercase;">{{ $pathMethod }}</span>&nbsp;&nbsp;<span style="color: darkslategray;">{{ $path }}</span></h4>
+                <h5>{{ $pathDetails.summary }}</h5>
+                <p><a href="{{ $pathDetails.externalDocs.url }}">{{ $pathDetails.externalDocs.description}}</a></p>
+                <p>Description: {{ $pathDetails.description | markdownify }}</p>
+                  {{ if isset $pathDetails "parameters" }}
+                    <h5>Parameters</h5>
+                    <ul>
+                    {{ range $parameterI, $parameter := $pathDetails.parameters }}
+
+                      {{ if isset $parameter "$ref" }}
+                        {{ $refPath := index $parameter "$ref" }}
+                        {{ range $index, $component := (split $refPath "/") }}
+                          {{ if (index $openapi.components.parameters $component) }}
+                            {{ $p := index $openapi.components.parameters $component }}
+                              <li><pre>{{$p.name}}{{cond $p.required "*" ""}}</pre></li>
+                          {{ end }}
+                        {{ end }}
+                      {{ end }}
+
+                    {{ end }}
+                    </ul>
+                  {{ end }}
+                  {{ if isset $pathDetails "requestBody" }}
+                    {{ $e := (index $pathDetails.requestBody.content "application/json").example }}
+                    <h5>Example Request Body</h5>
+                    <pre style="background: lightblue"><code>{{$e | jsonify (dict "indent" "  ") }}</code></pre>
+                  {{ end }}
+
+              </div>
+              <div style="width: 50%; display: flex; flex-direction: column">
+                {{ range $responseCode, $responseDetails := $pathDetails.responses }}
+                  </br>
+                  {{ if isset $responseDetails "content" }}
+                    {{ range $exampleName, $example := (index $responseDetails.content "application/json").examples }}
+                      {{ if isset $example "$ref" }}
+                        {{ $refPath := index $example "$ref" }}
+                        {{ range $index, $component := (split $refPath "/") }}
+                          {{ if (index $openapi.components.examples $component) }}
+                            <div style="max-height: calc(100%); overflow: auto">
+                              <span style="font-weight: bold">Example for Response Code: {{ $responseCode }}</span>
+                              <pre style="background: lightgreen"><code>{{(index $openapi.components.examples $component).value | jsonify (dict "indent" "  ") }}</code></pre>
+                            </div>
+                          {{ end }}
+                        {{ end }}
+                      {{ else }}
+                        <code style="flex-wrap: nowrap; overflow-x: scroll;">Example Response: {{ $example }}</code>
+                      {{ end }}
+                    {{ end }}
+                  {{ else }}
+                    <span style="background: lightyellow">No Example for Response Code: {{ $responseCode }}</span>
+                  {{ end }}
+                {{ end }}
+              </div>
+          </div>
+        {{ end }}
+      {{ end }}
+    </div>
+  </div>
+  <!--
+    {{/*
+      {{ end }}
+    */}}
+  -->

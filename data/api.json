@@ -1,0 +1,127 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Teste Deliver IT",
+    "description": "Teste do processo seletivo para a Deliver IT",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/corredores": {
+      "get": {
+        "description": "Retorna todos corredores",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/nome"
+          },
+          {
+            "$ref": "#/components/parameters/cpf"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "default": {
+                            "$ref": "#/components/examples/Corredores"
+                        }
+                    }
+                }
+            }
+          }
+        }
+      },
+      "post": {
+          "description": "Cria um novo corredor",
+          "requestBody": {
+              "content": {
+                  "application/json": {
+                      "example": {
+                          "nome": "Felipe",
+                          "cpf": "37128197060",
+                          "dataNascimento": "20200507"
+                      }
+                  }
+              }
+          },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "default": {
+                            "$ref": "#/components/examples/Corredor"
+                        }
+                    }
+                }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+      "parameters": {
+          "nome": {
+              "name": "nome",
+              "in": "path",
+              "required": false,
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "cpf": {
+              "name": "cpf",
+              "in": "path",
+              "required": false,
+              "schema": {
+                  "type": "string"
+              }
+          }
+      },
+      "examples": {
+          "Corredor": {
+              "value": {
+                  "data": {
+                      "nome": "Lucas",
+                      "cpf": "37128197060",
+                      "dataNascimento": "19940507"
+                  }
+              }
+          },
+          "Corredores": {
+              "value": {
+                  "data": [
+                      {
+                          "id": 1,
+                          "nome": "Lucas",
+                          "cpf": "37128197060",
+                          "dataNascimento": "19940507"
+                      },
+                      {
+                          "id": 2,
+                          "nome": "Gabriel",
+                          "cpf": "41542244099",
+                          "dataNascimento": "19940507"
+                      }
+                  ]
+              }
+          }
+      }
+  }
+}
